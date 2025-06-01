@@ -10,7 +10,6 @@ const app = express();
 app.use(bodyParser.json());
 
 // Set up Resend
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
