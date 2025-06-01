@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import { Resend } from "resend";
 import dotenv from "dotenv";
 dotenv.config();
+const resend = new Resend(process.env.RESEND_API_KEY); // Initialize Resend
 
 const app = express();
 app.use(bodyParser.json());
