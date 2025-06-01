@@ -2,7 +2,7 @@
   "name": "form-mailer",
   "version": "1.0.0",
   "main": "send-email.js",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "start": "node send-email.js"
   },
