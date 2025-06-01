@@ -16,7 +16,7 @@ app.post("/send", async (req, res) => {
 
   try {
     const data = await resend.emails.send({
-      from: "AITech Contact Form <noreply@aitechspaces.co>", // must be a verified domain or sender (see Step 2 below)
+      from: "AITech Contact Form <info@aitechspaces.co>", // must be a verified domain or sender (see Step 2 below)
       to: "info@aitechspaces.co",                    // where you want to receive form submissions
       reply_to: email,  
       subject: `New message from ${name}`,
