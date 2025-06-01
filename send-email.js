@@ -1,44 +1,34 @@
+// send-email.js
 import express from "express";
-import cors from "cors";
-import nodemailer from "nodemailer";
+import bodyParser from "body-parser";
+import { Resend } from "resend";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
+app.use(bodyParser.json());
 
-// ✅ CORS: allow your frontend
-app.use(cors({
-  origin: "https://aitechspaces.co"
-}));
-
-app.use(express.json());
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.secureserver.net",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+// Set up Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
 
   try {
-    await transporter.sendMail({
-      from: `"${name}" <${email}>`,
-      to: process.env.EMAIL_USER,
-      subject: "New Message from Website Contact Form",
-      text: message,
-      replyTo: email
+    const data = await resend.emails.send({
+      from: "AITech Contact Form <noreply@aitechspaces.co>", // must be a verified domain or sender (see Step 2 below)
+      to: "info@aitechspaces.co",                    // where you want to receive form submissions
+      reply_to: email,  
+      subject: `New message from ${name}`,
+      html: `<p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message}</p>`,
     });
 
-    res.status(200).send("Message sent!");
+    res.status(200).send({ success: true, data });
   } catch (err) {
-    console.error("Error sending email:", err);
-    res.status(500).send("Failed to send email.");
+    console.error("Resend error:", err);
+    res.status(500).send("Email failed");
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
