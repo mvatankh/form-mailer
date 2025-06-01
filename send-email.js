@@ -3,11 +3,15 @@ import express from "express";
 import bodyParser from "body-parser";
 import { Resend } from "resend";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors({
+  origin: "https://aitechspaces.co"  // ✅ your frontend domain
+}));
 
 // Set up Resend
 
