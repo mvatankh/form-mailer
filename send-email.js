@@ -1,5 +1,5 @@
 // send-email.js
-/*
+
 import express from "express";
 import bodyParser from "body-parser";
 import { Resend } from "resend";
@@ -15,7 +15,7 @@ app.use(cors({
 }));
 
 // Set up Resend
-
+/*
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
 
@@ -34,10 +34,9 @@ app.post("/send", async (req, res) => {
     res.status(500).send("Email failed");
   }
 });
-
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 */
+
+
 app.post("/contact", async (req, res) => {
   const { firstName, lastName, email, company, jobTitle, country, request, newsletter } = req.body;
   
@@ -68,4 +67,7 @@ app.post("/contact", async (req, res) => {
     res.status(500).json({ success: false, error: "Email failed" });
   }
 });
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
