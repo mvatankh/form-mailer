@@ -1,4 +1,5 @@
 // send-email.js
+/*
 import express from "express";
 import bodyParser from "body-parser";
 import { Resend } from "resend";
@@ -36,3 +37,35 @@ app.post("/send", async (req, res) => {
 
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+*/
+app.post("/contact", async (req, res) => {
+  const { firstName, lastName, email, company, jobTitle, country, request, newsletter } = req.body;
+  
+  const fullName = `${firstName} ${lastName}`;
+  const messageContent = `
+    <h3>New Contact Form Submission</h3>
+    <p><strong>Name:</strong> ${fullName}</p>
+    <p><strong>Email:</strong> ${email}</p>
+    <p><strong>Company:</strong> ${company}</p>
+    <p><strong>Job Title:</strong> ${jobTitle || 'Not provided'}</p>
+    <p><strong>Country:</strong> ${country || 'Not provided'}</p>
+    <p><strong>Newsletter:</strong> ${newsletter}</p>
+    <p><strong>Message:</strong><br>${request}</p>
+  `;
+
+  try {
+    const data = await resend.emails.send({
+      from: "AITech Contact Form <info@aitechspaces.co>",
+      to: "info@aitechspaces.co",
+      reply_to: email,
+      subject: `New contact from ${fullName} - ${company}`,
+      html: messageContent,
+    });
+
+    res.status(200).json({ success: true, data });
+  } catch (err) {
+    console.error("Resend error:", err);
+    res.status(500).json({ success: false, error: "Email failed" });
+  }
+});
+
